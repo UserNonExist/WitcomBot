@@ -58,6 +58,7 @@ public class Program
         }
         catch (GatewayReconnectException e)
         {
+            await _client.StopAsync();
             await _client.LogoutAsync();
             await Task.Delay(5000);
             await _client.LoginAsync(TokenType.Bot, "./Token/token.txt");
