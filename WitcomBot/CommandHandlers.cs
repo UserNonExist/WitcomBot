@@ -69,14 +69,7 @@ public class CommandHandlers
     }
     public async Task GetInfo(SocketSlashCommand command)
     {
-        var embed = new EmbedBuilder()
-            .WithTitle("Info")
-            .WithDescription($"เวอร์ชั่นบอท: {botVersion}\n\nผู้พัฒนา: {MentionUtils.MentionUser(315717809395204098)}\n\nGithub Repo: https://github.com/UserNonExist/WitcomBot/")
-            .WithColor(Color.Blue)
-            .WithCurrentTimestamp()
-            .WithFooter($"WITCOM Utilities Bot ~ สร้างโดย User_NotExist#0529 ~ เวอร์ชั่น {botVersion}");
-        
-        await command.RespondAsync(embed: embed.Build(), ephemeral: false);
+        await BuildMessageEmbed(Color.Green, "Info", $"เวอร์ชั่นบอท: {botVersion}\n\nผู้พัฒนา: {MentionUtils.MentionUser(315717809395204098)}\n\nGithub Repo: https://github.com/UserNonExist/WitcomBot/", true, command);
     }
 
     private async Task BuildMessageEmbed(Color colour, string title, string content, bool epher, SocketSlashCommand command)
