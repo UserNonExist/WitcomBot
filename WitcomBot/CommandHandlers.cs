@@ -71,7 +71,7 @@ public class CommandHandlers
     {
         var embed = new EmbedBuilder()
             .WithTitle("")
-            .WithDescription($"เวอร์ชั่น: {botVersion}\nผู้พัฒนา: {MentionUtils.MentionUser(315717809395204098)}")
+            .WithDescription($"เวอร์ชั่นบอท: {botVersion}\n\nผู้พัฒนา: {MentionUtils.MentionUser(315717809395204098)}\n\nGithub Repo: https://github.com/UserNonExist/WitcomBot/")
             .WithColor(Color.Blue)
             .WithCurrentTimestamp()
             .WithFooter($"WITCOM Utilities Bot ~ สร้างโดย User_NotExist#0529 ~ เวอร์ชั่น {botVersion}");
