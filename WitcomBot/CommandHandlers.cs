@@ -70,7 +70,7 @@ public class CommandHandlers
     public async Task GetInfo(SocketSlashCommand command)
     {
         var embed = new EmbedBuilder()
-            .WithTitle("")
+            .WithTitle("Info")
             .WithDescription($"เวอร์ชั่นบอท: {botVersion}\n\nผู้พัฒนา: {MentionUtils.MentionUser(315717809395204098)}\n\nGithub Repo: https://github.com/UserNonExist/WitcomBot/")
             .WithColor(Color.Blue)
             .WithCurrentTimestamp()
