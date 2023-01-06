@@ -14,7 +14,7 @@ public class EventHandlers
         {
             if (message.Author.IsBot)
                 return;
-            if (message.MentionedUsers.Count == 0)
+            if (message.MentionedUsers.Count > 0)
                 PingTriggered(message);
             if (message.MentionedEveryone)
                 PingEveryoneTriggered(message);
