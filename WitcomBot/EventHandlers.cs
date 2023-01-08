@@ -6,7 +6,7 @@ namespace WitcomBot;
 
 public class EventHandlers
 {
-    public string botVersion { get; set; } = "1.1.0";
+    public string botVersion { get; set; } = "1.1.2";
     
     public async Task MessageRecieved(SocketMessage message)
     {
@@ -60,7 +60,7 @@ public class EventHandlers
     {
         var embedBuilder = new EmbedBuilder()
                 .WithTitle("Ping Trigger")
-                .WithDescription( $"{MentionUtils.MentionUser(message.Author.Id)} - แท็กทุกคนหาพ่ อ ง")
+                .WithDescription( $"{MentionUtils.MentionUser(message.Author.Id)} - แท็กทุกคนหา พ่ อ ง")
                 .WithColor(Color.Blue)
                 .WithCurrentTimestamp()
                 .WithFooter($"WITCOM Utilities Bot ~ สร้างโดย User_NotExist#0529 ~ เวอร์ชั่น {botVersion}");

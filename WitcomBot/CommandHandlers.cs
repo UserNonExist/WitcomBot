@@ -6,7 +6,7 @@ namespace WitcomBot;
 
 public class CommandHandlers
 {
-    public string botVersion { get; set; }= "1.1.1";
+    public string botVersion { get; set; }= "1.1.2";
     
     public async Task AddPingTrigger(SocketSlashCommand command)
     {
@@ -71,7 +71,55 @@ public class CommandHandlers
     {
         await BuildMessageEmbed(Color.Blue, "Info", $"เวอร์ชั่นบอท: {botVersion}\n\nผู้พัฒนา: {MentionUtils.MentionUser(315717809395204098)}\n\nGithub Repo: https://github.com/UserNonExist/WitcomBot/", false, command);
     }
+    public async Task CurseTae(SocketSlashCommand command)
+    {
+        string Title = "ด่าไอ้เต้";
+        string FilePath = "./Data/CurseMessage.txt";
 
+        if (!File.Exists(FilePath))
+        {
+            File.Create(FilePath).Close();
+        }
+        
+        
+        List<string> cursedMessage = File.ReadAllLines(FilePath).ToList();
+        
+        if (cursedMessage.Count == 0)
+        {
+            await BuildMessageEmbed(Color.Red, Title, "ไม่มีข้อความที่ถูกเพิ่มเข้ามา", true, command);
+            return;
+        }
+        
+        Random random = new();
+        int randomIndex = random.Next(0, cursedMessage.Count);
+        
+        await command.Channel.SendMessageAsync(MentionUtils.MentionUser(723069900746129491));
+        await BuildMessageEmbed(Color.Green, Title, cursedMessage[randomIndex], false, command);
+        
+    }
+
+    public async Task AddCurse(SocketSlashCommand command)
+    {
+        string Title = "เพิ่มข้อความด่า";
+        string FilePath = "./Data/CurseMessage.txt";
+        
+        if (!File.Exists(FilePath))
+        {
+            File.Create(FilePath).Close();
+        }
+        
+        string Message = command.Data.Options.FirstOrDefault().Value.ToString();
+        
+        List<string> cursedMessage = File.ReadAllLines(FilePath).ToList();
+        cursedMessage.Add(Message);
+        File.WriteAllLines(FilePath, cursedMessage);
+        
+        await BuildMessageEmbed(Color.Green, Title, "บอทได้เพิ่มข้อความด่าเข้าไปแล้ว", true, command);
+    }
+    
+    
+    
+    // Embed Builder
     private async Task BuildMessageEmbed(Color colour, string title, string content, bool epher, SocketSlashCommand command)
     {
         var embed = new EmbedBuilder()

@@ -21,50 +21,38 @@ public class Program
 
     public async Task MainAsync()
     {
-        try
+        _client = new DiscordSocketClient();
+        _client.Log += Log; 
+        Database.Database.Initialize();
+
+        if (!Directory.Exists(textFolder))
         {
+            Directory.CreateDirectory(textFolder);
+            File.WriteAllText("./Token/token.txt", "Your Token Here");
 
-            _client = new DiscordSocketClient();
-            _client.Log += Log;
-            Database.Database.Initialize();
-
-            if (!Directory.Exists(textFolder))
-            {
-                Directory.CreateDirectory(textFolder);
-                File.WriteAllText("./Token/token.txt", "Your Token Here");
-
-                Console.WriteLine("Please enter your token in the token.txt file");
-                await Task.Delay(-1);
-            }
-
-            var token = File.ReadAllText("./Token/token.txt");
-
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync();
-            CommandHandlers = new CommandHandlers();
-            EventHandlers = new EventHandlers();
-
-            //Hooking up the event
-            _client.Ready += Client_Ready;
-            _client.SlashCommandExecuted += command => SlashCommandHandler(command);
-            _client.MessageReceived += EventHandlers.MessageRecieved;
-
-            // Block this task until the program is closed.
+            Console.WriteLine("Please enter your token in the token.txt file");
             await Task.Delay(-1);
-            _client.Ready -= Client_Ready;
-            _client.SlashCommandExecuted -= command => SlashCommandHandler(command);
-            _client.MessageReceived -= EventHandlers.MessageRecieved;
-            Database.Database.Close();
         }
-        catch (GatewayReconnectException e)
-        {
-            await _client.StopAsync();
-            await _client.LogoutAsync();
-            await Task.Delay(5000);
-            await _client.LoginAsync(TokenType.Bot, "./Token/token.txt");
-            await _client.StartAsync();
-            throw;
-        }
+
+        var token = File.ReadAllText("./Token/token.txt");
+
+        await _client.LoginAsync(TokenType.Bot, token);
+        await _client.StartAsync();
+        CommandHandlers = new CommandHandlers();
+        EventHandlers = new EventHandlers();
+
+        //Hooking up the event
+        _client.Ready += Client_Ready;
+        _client.SlashCommandExecuted += command => SlashCommandHandler(command);
+        _client.MessageReceived += EventHandlers.MessageRecieved;
+
+        // Block this task until the program is closed.
+        await Task.Delay(-1);
+        _client.Ready -= Client_Ready;
+        _client.SlashCommandExecuted -= command => SlashCommandHandler(command);
+        _client.MessageReceived -= EventHandlers.MessageRecieved;
+        Database.Database.Close();
+        
     }
     
     private Task Log(LogMessage msg)
@@ -107,6 +95,17 @@ public class Program
         globalCommandInfo.WithDescription("ดูข้อมูลของบอท");
         applicationCommandProperties.Add(globalCommandInfo.Build());
         
+        SlashCommandBuilder globalCommandCurseTae = new SlashCommandBuilder();
+        globalCommandCurseTae.WithName("curse-tae");
+        globalCommandCurseTae.WithDescription("ด่าเต้");
+        applicationCommandProperties.Add(globalCommandCurseTae.Build());
+        
+        SlashCommandBuilder globalCommandCurseAdd = new SlashCommandBuilder();
+        globalCommandCurseAdd.WithName("curse-add");
+        globalCommandCurseAdd.WithDescription("เพิ่มคำด่า");
+        globalCommandCurseAdd.AddOption("message", ApplicationCommandOptionType.String, "เพิ่มข้อความที่จะด่า", isRequired: true);
+        applicationCommandProperties.Add(globalCommandCurseAdd.Build());
+        
         try
         {
             await _client.BulkOverwriteGlobalApplicationCommandsAsync(applicationCommandProperties.ToArray());
@@ -142,6 +141,14 @@ public class Program
             
             case "info":
                 await CommandHandlers.GetInfo(command);
+                break;
+            
+            case "curse-tae":
+                await CommandHandlers.CurseTae(command);
+                break;
+            
+            case "curse-add":
+                await CommandHandlers.AddCurse(command);
                 break;
         }
     }
